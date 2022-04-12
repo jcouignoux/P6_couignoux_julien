@@ -1,0 +1,25 @@
+body {
+    background-color: #111;
+    color: #EEE;
+    font-family: 'Roboto Slab', serif;
+  }
+
+#conteneur {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#categories, #topMovie {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.category {
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+}
+.show {
+    visibility: visible;
+}
