@@ -8,20 +8,20 @@ function topMovieWindow(movie) {
     let topMovie = document.getElementById('topMovie');
     topMovie.innerHTML = (
         '<div class="card">\
-            <img src="' + movie.image_url +'" alt="John" style="width:30%">\
+            <img src="' + movie.image_url +'" alt="John" style="width:10%">\
             <h1>'+ movie.title +'</h1>\
             <p class="title">'+ movie.imdb_score +'</p>\
-            <p><button id="modalBtn">Voir</button></p>\
+            <p><button id="modalBtn'+ movie.id +'">Voir</button></p>\
         </div>\
-        <div id="myModal" class="modal">\
+        <div id="myModal'+ movie.id +'" class="modal">\
             <div class="modal-content">\
             <span class="close">&times;</span>\
-            <p>Some text in the Modal..</p>\
+            <p>'+ movie.title +'</p>\
             </div>\
         </div>'
     )
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("modalBtn");
+    var modal = document.getElementById("myModal" + movie.id);
+    var btn = document.getElementById("modalBtn" + movie.id);
     var span = document.getElementsByClassName("close")[0];
     btn.onclick = function() {
         modal.style.display = "block";
@@ -34,6 +34,67 @@ function topMovieWindow(movie) {
           modal.style.display = "none";
         }
       }
+}
+
+function carrousel(movies) {
+    let carrousel = document.getElementById('Action');
+    console.log(movies);
+    carrousel.innerHTML = (
+        '<div class="carousel-container">\
+            <div class="inner-carousel">\
+                <div class="track">\
+                    <div class="card-container">\
+                        <div class=card><img src="'+ movies[0].image_url +'></div>\
+                    </div>\
+                    <div class="card-container">\
+                        <div class=card><img src="'+ movies[1].image_url +'></div>\
+                    </div>\
+                    <div class="card-container">\
+                        <div class=card><img src="'+ movies[2].image_url +'></div>\
+                    </div>\
+                    <div class="card-container">\
+                        <div class=card><img src="'+ movies[3].image_url +'></div>\
+                    </div>\
+                    <div class="card-container">\
+                        <div class=card><img src="'+ movies[4].image_url +'></div>\
+                    </div>\
+                    <div class="card-container">\
+                        <div class="card card12">12</div>\
+                    </div>\
+                </div>\
+                <div class="nav">\
+                    <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>\
+                    <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>\
+                </div>\
+            </div>\
+        </div>'
+    )
+    const prev = document.querySelector(".prev");
+const next = document.querySelector(".next");
+const carousel = document.querySelector(".carousel-container");
+const track = document.querySelector(".track");
+let width = carousel.offsetWidth;
+let index = 0;
+window.addEventListener("resize", function () {
+  width = carousel.offsetWidth;
+});
+next.addEventListener("click", function (e) {
+  e.preventDefault();
+  index = index + 1;
+  prev.classList.add("show");
+  track.style.transform = "translateX(" + index * -width + "px)";
+  if (track.offsetWidth - index * width < index * width) {
+    next.classList.add("hide");
+  }
+});
+prev.addEventListener("click", function () {
+  index = index - 1;
+  next.classList.remove("hide");
+  if (index === 0) {
+    prev.classList.remove("show");
+  }
+  track.style.transform = "translateX(" + index * -width + "px)";
+});
 }
 
 function getMovies(filter) {
@@ -58,7 +119,7 @@ function topMovie() {
     getMovies('?sort_by=-imdb_score')
     .then(movies => {
         console.log(movies)
-        movie = movies[0]
+        let movie = movies[0]
         topMovieWindow(movie)
     });
 }
@@ -79,14 +140,10 @@ getMovies('?genre=Action')
     .then(movies => {
         console.log('Action');
         const newCat =  document.createElement("div");
-        newCat.innerText = 'Action';
+        newCat.setAttribute('id', 'Action')
+        newCat.classList.add("category")
         categoryCont.appendChild(newCat);
-        for (movie of movies) {
-            const newMov = document.createElement("p");
-            newMov.innerText = movie.title;
-            newMov.classList.add("category");
-            newCat.appendChild(newMov);
-        }
+        carrousel(movies)
     });
     
 getMovies('?genre=Animation')
@@ -95,7 +152,7 @@ getMovies('?genre=Animation')
     const newCat =  document.createElement("div");
     newCat.innerText = 'Animation';
     categoryCont.appendChild(newCat);
-    for (movie of movies) {
+    for (let movie of movies) {
         const newMov = document.createElement("p");
         newMov.innerText = movie.title;
         newMov.classList.add("category");
@@ -109,7 +166,7 @@ getMovies('?genre=Biography')
         const newCat =  document.createElement("div");
         newCat.innerText = 'Biography';
         categoryCont.appendChild(newCat);
-        for (movie of movies) {
+        for (let movie of movies) {
             const newMov = document.createElement("p");
             newMov.innerText = movie.title;
             newMov.classList.add("category");
