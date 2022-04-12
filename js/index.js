@@ -4,6 +4,37 @@ const url = "http://localhost:8000/api/v1/titles/"
 const categories = ['Action', 'Animation', 'Biography']
 const categoryCont = document.getElementById('categories');
 
+function topMovieWindow(movie) {
+    let topMovie = document.getElementById('topMovie');
+    topMovie.innerHTML = (
+        '<div class="card">\
+            <img src="' + movie.image_url +'" alt="John" style="width:30%">\
+            <h1>'+ movie.title +'</h1>\
+            <p class="title">'+ movie.imdb_score +'</p>\
+            <p><button id="modalBtn">Voir</button></p>\
+        </div>\
+        <div id="myModal" class="modal">\
+            <div class="modal-content">\
+            <span class="close">&times;</span>\
+            <p>Some text in the Modal..</p>\
+            </div>\
+        </div>'
+    )
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("modalBtn");
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+}
 
 function getMovies(filter) {
     return fetch(url + filter)
@@ -23,12 +54,12 @@ function getMovies(filter) {
 
 function topMovie() {
     let topMovie = document.getElementById('topMovie');
-    let movie = ''
+    let topMovieTemplate = document.createElement('topMovieTemplate')
     getMovies('?sort_by=-imdb_score')
     .then(movies => {
         console.log(movies)
         movie = movies[0]
-        topMovie.innerText = movie.title;
+        topMovieWindow(movie)
     });
 }
  
