@@ -78,26 +78,18 @@ function topMovieWindow(movie) {
 function carrousel(genre, movies) {
     let carrousel = document.getElementById(genre);
     // console.log(movies);
+    let HTML = ''
+    for (let movie of movies) {
+        HTML = HTML + (
+            '<div class="card-container">\
+                <div class=card>'+ movie.title +'</div>\
+            </div>'
+        )
+    }
     carrousel.innerHTML = (
         '<div class="carousel-container">\
             <div class="inner-carousel">\
-                <div class="track">\
-                    <div class="card-container">\
-                        <div class=card>'+ movies[0].title +'</div>\
-                    </div>\
-                    <div class="card-container">\
-                        <div class=card>'+ movies[1].title +'</div>\
-                    </div>\
-                    <div class="card-container">\
-                        <div class=card>'+ movies[2].title +'</div>\
-                    </div>\
-                    <div class="card-container">\
-                        <div class=card>'+ movies[3].title +'</div>\
-                    </div>\
-                    <div class="card-container">\
-                        <div class=card>'+ movies[4].title +'</div>\
-                    </div>\
-                </div>\
+                <div class="track">'+ HTML +'</div>\
                 <div class="nav">\
                     <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>\
                     <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>\
