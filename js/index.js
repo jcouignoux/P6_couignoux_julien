@@ -43,15 +43,17 @@ function displayMovieCard(movie) {
                 <img src="' + movie_detail.image_url +'" alt="John" style="width:100%">\
                 </div>\
                 <div>\
-                <h1>'+ movie_detail.title +'</h1>\
+                <p class="title">'+ movie_detail.title +'</p>\
                 <h2>'+ movie_detail.genres +'</h2>\
                 <h2>'+ movie_detail.year +'</h2>\
-                <h2>'+ movie_detail.votes +'</h2>\
+                <h2>'+ movie_detail.rated +'</h2>\
                 <h2>'+ movie_detail.imdb_score +'</h2>\
                 <h4>'+ movie_detail.writers +'</h4>\
                 <h4>'+ movie_detail.actors +'</h4>\
-                <h4>'+ movie_detail.genres +'</h4>\
-                <p class="title">'+ movie_detail.imdb_score +'</p>\
+                <h4>'+ movie_detail.duration +'</h4>\
+                <h4>'+ movie_detail.countries +'</h4>\
+                <h4>'+ movie_detail.worldwide_gross_income +'</h4>\
+                <h4>'+ movie_detail.description +'</h4>\
                 </div>\
             </div>'
         )
