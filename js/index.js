@@ -4,22 +4,19 @@ const url = "http://localhost:8000/api/v1/titles/"
 const categories = ['Action', 'Animation', 'Biography']
 const categoryCont = document.getElementById('categories');
 
-function topMovieWindow(movie) {
-    let topMovie = document.getElementById('topMovie');
-    topMovie.innerHTML = (
-        '<div class="card">\
-            <img src="' + movie.image_url +'" alt="John" style="width:10%">\
-            <h1>'+ movie.title +'</h1>\
-            <p class="title">'+ movie.imdb_score +'</p>\
-            <p><button id="modalBtn'+ movie.id +'">Voir</button></p>\
-        </div>\
-        <div id="myModal'+ movie.id +'" class="modal">\
-            <div class="modal-content">\
+function getModalContent(movie) {
+    let conteneur = document.getElementById('conteneur')
+    modalContent = document.createElement('div')
+    conteneur.appendChild(modalContent)
+    modalContent.setAttribute('id', 'myModal'+ movie.id)
+    modalContent.classList.add('modal')
+    modalContent.innerHTML = (
+        '<div class="modal-content">\
             <span class="close">&times;</span>\
-            <p>'+ movie.title +'</p>\
-            </div>\
+            <div id=card' + movie.id + '></div>\
         </div>'
     )
+    displayMovieCard(movie)
     var modal = document.getElementById("myModal" + movie.id);
     var btn = document.getElementById("modalBtn" + movie.id);
     var span = document.getElementsByClassName("close")[0];
@@ -36,9 +33,51 @@ function topMovieWindow(movie) {
       }
 }
 
+function displayMovieCard(movie) {
+    getMovie(movie.id)
+    .then(movie_detail => {
+        let movieCard = document.getElementById('card' + movie.id)
+        movieCard.innerHTML = (
+            '<div class="card">\
+                <div>\
+                <img src="' + movie_detail.image_url +'" alt="John" style="width:100%">\
+                </div>\
+                <div>\
+                <h1>'+ movie_detail.title +'</h1>\
+                <h2>'+ movie_detail.genres +'</h2>\
+                <h2>'+ movie_detail.year +'</h2>\
+                <h2>'+ movie_detail.votes +'</h2>\
+                <h2>'+ movie_detail.imdb_score +'</h2>\
+                <h4>'+ movie_detail.writers +'</h4>\
+                <h4>'+ movie_detail.actors +'</h4>\
+                <h4>'+ movie_detail.genres +'</h4>\
+                <p class="title">'+ movie_detail.imdb_score +'</p>\
+                </div>\
+            </div>'
+        )
+    })
+}
+
+function topMovieWindow(movie) {
+    let topMovie = document.getElementById('topMovie');
+    topMovie.innerHTML = (
+        '<div class="card">\
+            <div>\
+                <img src="' + movie.image_url +'" alt="John" style="width:100%">\
+            </div>\
+            <div>\
+                <h1>'+ movie.title +'</h1>\
+                <p class="title">'+ movie.imdb_score +'</p>\
+                <p><button id="modalBtn'+ movie.id +'">Voir</button></p>\
+            </div>\
+        </div>'
+    )
+    getModalContent(movie)
+}
+
 function carrousel(genre, movies) {
     let carrousel = document.getElementById(genre);
-    console.log(movies);
+    // console.log(movies);
     carrousel.innerHTML = (
         '<div class="carousel-container">\
             <div class="inner-carousel">\
@@ -96,6 +135,7 @@ function carrousel(genre, movies) {
 }
 
 function getMovies(filter) {
+    // console.log(url + filter)
     return fetch(url + filter)
         .then(function(res) {
             if (res.ok) {
@@ -104,7 +144,26 @@ function getMovies(filter) {
         })
         .then(function(value) {
             let result = value.results;
+            // console.log(result)
             return result;
+        })
+        .catch(function(err) {
+            console.log('error')
+        });
+}
+
+function getMovie(filter) {
+    // console.log(url + filter)
+    return fetch(url + filter)
+        .then(function(res) {
+            if (res.ok) {
+                return res.json();
+            }
+        })
+        .then(function(value) {
+            // let result = value.results;
+            // console.log(result)
+            return value;
         })
         .catch(function(err) {
             console.log('error')
@@ -116,7 +175,7 @@ function topMovie() {
     let topMovieTemplate = document.createElement('topMovieTemplate')
     getMovies('?sort_by=-imdb_score')
     .then(movies => {
-        console.log(movies)
+        // console.log(movies)
         let movie = movies[0]
         topMovieWindow(movie)
     });
@@ -136,7 +195,7 @@ topMovie()
 // }
 getMovies('?genre=Action')
 .then(movies => {
-    console.log('Action');
+    // console.log('Action');
     const newCat =  document.createElement("div");
     let genre = "Action"
     newCat.setAttribute('id', 'Action')
@@ -146,7 +205,7 @@ getMovies('?genre=Action')
     
 getMovies('?genre=Animation')
 .then(movies => {
-    console.log('Animation');
+    // console.log('Animation');
     const newCat =  document.createElement("div");
     let genre = "Animation"
     newCat.setAttribute('id', 'Animation')
@@ -156,7 +215,7 @@ getMovies('?genre=Animation')
 
 getMovies('?genre=Biography')
     .then(movies => {
-        console.log('Biography');
+        // console.log('Biography');
         const newCat =  document.createElement("div");
         let genre = "Biography"
         newCat.setAttribute('id', 'Biography')

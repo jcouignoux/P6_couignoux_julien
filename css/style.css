@@ -10,10 +10,10 @@ body {
     justify-content: center;
 }
 
-#topMovie{
+/* #topMovie{
     display: flex;
     justify-content: center;
-}
+} */
 
 #categories {
     display: flex;
@@ -109,16 +109,17 @@ img {
 .card {
   width: 100%;
   height: 100%;
-  /*display: flex;
-  flex-direction: column;
+  display: flex;
+  justify-content: space-between;
+  /* flex-direction: column;
   justify-content: center;
-  align-items: center;*/
+  align-items: center; */
   background-position: center bottom;
   background-size: center;
   background-repeat: no-repeat;
   border-radius: 10px;
 }
-  
+
 .nav button {
     position: absolute;
     top: 50%;
