@@ -36,30 +36,27 @@ function topMovieWindow(movie) {
       }
 }
 
-function carrousel(movies) {
-    let carrousel = document.getElementById('Action');
+function carrousel(genre, movies) {
+    let carrousel = document.getElementById(genre);
     console.log(movies);
     carrousel.innerHTML = (
         '<div class="carousel-container">\
             <div class="inner-carousel">\
                 <div class="track">\
                     <div class="card-container">\
-                        <div class=card><img src="'+ movies[0].image_url +'></div>\
+                        <div class=card>'+ movies[0].title +'</div>\
                     </div>\
                     <div class="card-container">\
-                        <div class=card><img src="'+ movies[1].image_url +'></div>\
+                        <div class=card>'+ movies[1].title +'</div>\
                     </div>\
                     <div class="card-container">\
-                        <div class=card><img src="'+ movies[2].image_url +'></div>\
+                        <div class=card>'+ movies[2].title +'</div>\
                     </div>\
                     <div class="card-container">\
-                        <div class=card><img src="'+ movies[3].image_url +'></div>\
+                        <div class=card>'+ movies[3].title +'</div>\
                     </div>\
                     <div class="card-container">\
-                        <div class=card><img src="'+ movies[4].image_url +'></div>\
-                    </div>\
-                    <div class="card-container">\
-                        <div class="card card12">12</div>\
+                        <div class=card>'+ movies[4].title +'</div>\
                     </div>\
                 </div>\
                 <div class="nav">\
@@ -69,32 +66,33 @@ function carrousel(movies) {
             </div>\
         </div>'
     )
-    const prev = document.querySelector(".prev");
-const next = document.querySelector(".next");
-const carousel = document.querySelector(".carousel-container");
-const track = document.querySelector(".track");
-let width = carousel.offsetWidth;
-let index = 0;
-window.addEventListener("resize", function () {
-  width = carousel.offsetWidth;
-});
-next.addEventListener("click", function (e) {
-  e.preventDefault();
-  index = index + 1;
-  prev.classList.add("show");
-  track.style.transform = "translateX(" + index * -width + "px)";
-  if (track.offsetWidth - index * width < index * width) {
-    next.classList.add("hide");
-  }
-});
-prev.addEventListener("click", function () {
-  index = index - 1;
-  next.classList.remove("hide");
-  if (index === 0) {
-    prev.classList.remove("show");
-  }
-  track.style.transform = "translateX(" + index * -width + "px)";
-});
+    sel = ('#' + genre + ' .prev')
+    const prev = document.querySelector('#' + genre + ' .prev');
+    const next = document.querySelector('#' + genre + ' .next');
+    const carousel = document.querySelector('#' + genre + ' .carousel-container');
+    const track = document.querySelector('#' + genre + ' .track');
+    let width = carousel.offsetWidth;
+    let index = 0;
+    window.addEventListener("resize", function () {
+      width = carousel.offsetWidth;
+    });
+    next.addEventListener("click", function (e) {
+      e.preventDefault();
+      index = index + 1;
+      prev.classList.add("show");
+      track.style.transform = "translateX(" + index * -width + "px)";
+      if (track.offsetWidth - index * width < index * width) {
+        next.classList.add("hide");
+      }
+    });
+    prev.addEventListener("click", function () {
+      index = index - 1;
+      next.classList.remove("hide");
+      if (index === 0) {
+        prev.classList.remove("show");
+      }
+      track.style.transform = "translateX(" + index * -width + "px)";
+    });
 }
 
 function getMovies(filter) {
@@ -137,39 +135,31 @@ topMovie()
 //     });
 // }
 getMovies('?genre=Action')
-    .then(movies => {
-        console.log('Action');
-        const newCat =  document.createElement("div");
-        newCat.setAttribute('id', 'Action')
-        newCat.classList.add("category")
-        categoryCont.appendChild(newCat);
-        carrousel(movies)
-    });
+.then(movies => {
+    console.log('Action');
+    const newCat =  document.createElement("div");
+    let genre = "Action"
+    newCat.setAttribute('id', 'Action')
+    categoryCont.appendChild(newCat);
+    carrousel(genre, movies)
+});
     
 getMovies('?genre=Animation')
 .then(movies => {
     console.log('Animation');
     const newCat =  document.createElement("div");
-    newCat.innerText = 'Animation';
+    let genre = "Animation"
+    newCat.setAttribute('id', 'Animation')
     categoryCont.appendChild(newCat);
-    for (let movie of movies) {
-        const newMov = document.createElement("p");
-        newMov.innerText = movie.title;
-        newMov.classList.add("category");
-        newCat.appendChild(newMov);
-    }
+    carrousel(genre, movies)
 });
 
 getMovies('?genre=Biography')
     .then(movies => {
         console.log('Biography');
         const newCat =  document.createElement("div");
-        newCat.innerText = 'Biography';
+        let genre = "Biography"
+        newCat.setAttribute('id', 'Biography')
         categoryCont.appendChild(newCat);
-        for (let movie of movies) {
-            const newMov = document.createElement("p");
-            newMov.innerText = movie.title;
-            newMov.classList.add("category");
-            newCat.appendChild(newMov);
-        }
+        carrousel(genre, movies)
     });
