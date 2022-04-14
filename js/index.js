@@ -6,32 +6,30 @@ const categoryCont = document.getElementById('categories');
 
 function getModalContent(movie) {
     let conteneur = document.getElementById('conteneur')
-    modalContent = document.createElement('div')
-    conteneur.appendChild(modalContent)
-    modalContent.setAttribute('id', 'myModal'+ movie.id)
-    modalContent.classList.add('modal')
-    modalContent.innerHTML = (
+    let modal = document.createElement('div')
+    conteneur.appendChild(modal)
+    modal.setAttribute('id', 'myModal'+ movie.id)
+    modal.classList.add('modal')
+    modal.innerHTML = (
         '<div class="modal-content">\
             <span id="close'+ movie.id +'" class="close">&times;</span>\
             <div id=card' + movie.id + '></div>\
         </div>'
     )
     displayMovieCard(movie)
-    var modal = document.getElementById("myModal"+ movie.id);
     console.log(modal)
-    var btn = document.getElementById("modalBtn"+ movie.id);
-    console.log(btn)
-    // var span = document.getElementsByClassName("close")[0];
+    // var btn = document.getElementById("modalBtn"+ movie.id);
     var span = document.getElementById("close"+ movie.id);
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
+    modal.style.display = "block";
     span.onclick = function() {
         modal.style.display = "none";
+        // modal.remove();
+        conteneur.removeChild(modal)
     }
     window.onclick = function(event) {
         if (event.target == modal) {
           modal.style.display = "none";
+          modal.remove();
         }
       }
 }
@@ -77,6 +75,10 @@ function topMovieWindow(movie) {
             </div>\
         </div>'
     )
+    var btn = document.getElementById("modalBtn"+ movie.id);
+    btn.onclick = function() {
+        getModalContent(movie)
+    }
 }
 
 function carrousel(genre, movies) {
@@ -102,7 +104,10 @@ function carrousel(genre, movies) {
                 '<p><button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./sans-couverture.png\'"></button></p>'
         )
         track.appendChild(cardCont)
-        getModalContent(movie)
+        var btn = document.getElementById("modalBtn"+ movie.id);
+        btn.onclick = function() {
+            getModalContent(movie)
+        }
     }
     sel = ('#' + genre + ' .prev')
     const prev = document.querySelector('#' + genre + ' .prev');
@@ -177,7 +182,6 @@ function topMovie() {
         // console.log(movies)
         let movie = movies[0]
         topMovieWindow(movie)
-        getModalContent(movie)
     });
 }
  
