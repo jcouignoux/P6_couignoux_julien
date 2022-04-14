@@ -66,7 +66,7 @@ function topMovieWindow(movie) {
     topMovie.innerHTML = (
         '<div class="card">\
             <div>\
-                <img src="' + movie.image_url +'" alt="John" style="width:100%">\
+                <img src="' + movie.image_url +'">\
             </div>\
             <div>\
                 <h1>'+ movie.title +'</h1>\
@@ -83,8 +83,6 @@ function topMovieWindow(movie) {
 
 function carrousel(genre, movies) {
     let carrousel = document.getElementById(genre);
-    console.log(movies);
-    let HTML = ''
     carrousel.innerHTML = (
         '<div class="carousel-container">\
             <div class="inner-carousel">\
@@ -97,6 +95,7 @@ function carrousel(genre, movies) {
         </div>'
     )
     const track = document.querySelector('#' + genre + ' .track');
+    // console.log(movies)
     for (let movie of movies) {
         cardCont = document.createElement('div')
         cardCont.classList.add("card-container")
@@ -123,7 +122,7 @@ function carrousel(genre, movies) {
       e.preventDefault();
       index = index + 1;
       prev.classList.add("show");
-      track.style.transform = "translateX(" + index * -width + "px)";
+      track.style.transform = "translateX(" + index * -width  + "px)";
       if (track.offsetWidth - index * width < index * width) {
         next.classList.add("hide");
       }
@@ -138,9 +137,8 @@ function carrousel(genre, movies) {
     });
 }
 
-function getMovies(filter) {
-    // console.log(url + filter)
-    return fetch(url + filter)
+async function getMovies(filter) {
+    return res = await fetch(url + filter)
         .then(function(res) {
             if (res.ok) {
                 return res.json();
@@ -148,25 +146,22 @@ function getMovies(filter) {
         })
         .then(function(value) {
             let result = value.results;
-            // console.log(result)
-            return result;
+            let next = value.next;
+            return [result, next];
         })
         .catch(function(err) {
             console.log('error')
         });
 }
 
-function getMovie(filter) {
-    // console.log(url + filter)
-    return fetch(url + filter)
+async function getMovie(filter) {
+    return res = await fetch(url + filter)
         .then(function(res) {
             if (res.ok) {
                 return res.json();
             }
         })
         .then(function(value) {
-            // let result = value.results;
-            // console.log(result)
             return value;
         })
         .catch(function(err) {
@@ -175,11 +170,9 @@ function getMovie(filter) {
 }
 
 function topMovie() {
-    let topMovie = document.getElementById('topMovie');
-    // let topMovieTemplate = document.createElement('topMovieTemplate')
     getMovies('?sort_by=-imdb_score')
-    .then(movies => {
-        // console.log(movies)
+    .then(ret => {
+        let movies = ret[0];
         let movie = movies[0]
         topMovieWindow(movie)
     });
@@ -187,45 +180,27 @@ function topMovie() {
  
 topMovie()
 
-// for (cat_index of Array(categories.length).keys()) {
-//     console.log(cat_index);
-//     const newCat =  document.createElement("div");
-//     getMovies('?genre=' + categories[cat_index])
-//     .then(category => {
-//         console.log(category);
-//         newCat.innerText = categories[cat_index];
-//         categoryCont.appendChild(newCat);
-//     });
-// }
-getMovies('?genre=Action')
-.then(movies => {
-    // console.log('Action');
-    const newCat =  document.createElement("div");
-    let genre = "Action"
-    newCat.setAttribute('id', 'Action')
-    categoryCont.appendChild(newCat);
-    carrousel(genre, movies)
-    // for (let movie of movies) {
-    //     getModalContent(movie)
-    // }
-});
-    
-getMovies('?genre=Animation')
-.then(movies => {
-    // console.log('Animation');
-    const newCat =  document.createElement("div");
-    let genre = "Animation"
-    newCat.setAttribute('id', 'Animation')
-    categoryCont.appendChild(newCat);
-    carrousel(genre, movies)
-});
-
-getMovies('?genre=Biography')
-    .then(movies => {
-        // console.log('Biography');
-        const newCat =  document.createElement("div");
-        let genre = "Biography"
-        newCat.setAttribute('id', 'Biography')
-        categoryCont.appendChild(newCat);
-        carrousel(genre, movies)
+for (let cat of categories) {
+    getMovies('?genre=' + cat)
+        .then(ret => {
+            let movies = ret[0];
+            let next = ret[1];
+            if (next != null) {
+                next_page = next.split("/").pop();
+                getMovies(next_page)
+                .then((res) => {
+                    let moviesToAdd = res[0]
+                    next = res[1]
+                    for (let movie of moviesToAdd) {
+                        movies.push(movie)
+                    }
+                    console.log(movies)
+                    const newCat =  document.createElement("div");
+                    let genre = cat
+                    newCat.setAttribute('id', cat)
+                    categoryCont.appendChild(newCat);
+                    carrousel(genre, movies)
+                })
+            }
     });
+}
