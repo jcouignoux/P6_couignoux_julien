@@ -1,7 +1,7 @@
 // import { movie } from './models';
 // const movie = require('./model/movie')
 const url = "http://localhost:8000/api/v1/titles/"
-const categories = ['Action', 'Animation', 'Biography']
+const categories = ['action', 'animation', 'biography']
 const categoryCont = document.getElementById('categories');
 
 function getModalContent(movie) {
@@ -45,7 +45,7 @@ function displayMovieCard(movie) {
                 </div>\
                 <div>\
                 <p class="title">'+ movie_detail.title +'</p>\
-                <h2>'+ movie_detail.genres +'</h2>\
+                <p>'+ movie_detail.genres +'<p>\
                 <h2>'+ movie_detail.year +'</h2>\
                 <h2>'+ movie_detail.rated +'</h2>\
                 <h2>'+ movie_detail.imdb_score +'</h2>\
@@ -81,33 +81,26 @@ function topMovieWindow(movie) {
     }
 }
 
-function carrousel(genre, movies) {
-    let carrousel = document.getElementById(genre);
-    carrousel.innerHTML = (
-        '<div class="carousel-container">\
-            <div class="inner-carousel">\
-                <div class="track"></div>\
-                <div class="nav">\
-                    <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>\
-                    <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>\
-                </div>\
-            </div>\
-        </div>'
-    )
+function getCarrousel(genre, pageUrl) {
     const track = document.querySelector('#' + genre + ' .track');
-    // console.log(movies)
-    for (let movie of movies) {
-        cardCont = document.createElement('div')
-        cardCont.classList.add("card-container")
-        cardCont.innerHTML =  (
-                '<p><button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./sans-couverture.png\'"></button></p>'
-        )
-        track.appendChild(cardCont)
-        var btn = document.getElementById("modalBtn"+ movie.id);
-        btn.onclick = function() {
-            getModalContent(movie)
+    getMovies(pageUrl)
+    .then(ret => {
+        movies = ret[0];
+        prevPage = ret[1];
+        nextPage = ret[2];
+        for (let movie of movies) {
+            cardCont = document.createElement('div')
+            cardCont.classList.add("card-container")
+            cardCont.innerHTML =  (
+                    '<p><button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./sans-couverture.png\'"></button></p>'
+            )
+            track.appendChild(cardCont)
+            var btn = document.getElementById("modalBtn"+ movie.id);
+            btn.onclick = function() {
+                getModalContent(movie)
+            }
         }
-    }
+    });
     sel = ('#' + genre + ' .prev')
     const prev = document.querySelector('#' + genre + ' .prev');
     const next = document.querySelector('#' + genre + ' .next');
@@ -115,6 +108,7 @@ function carrousel(genre, movies) {
     // const track = document.querySelector('#' + genre + ' .track');
     let width = carousel.offsetWidth;
     let index = 0;
+    console.log(width)
     window.addEventListener("resize", function () {
       width = carousel.offsetWidth;
     });
@@ -126,6 +120,8 @@ function carrousel(genre, movies) {
       if (track.offsetWidth - index * width < index * width) {
         next.classList.add("hide");
       }
+      track.innerHTML = '';
+      getCarrousel(genre, nextPage)
     });
     prev.addEventListener("click", function () {
       index = index - 1;
@@ -134,11 +130,32 @@ function carrousel(genre, movies) {
         prev.classList.remove("show");
       }
       track.style.transform = "translateX(" + index * -width + "px)";
+      track.innerHTML = '';
+      getCarrousel(genre, prevPage)
     });
 }
 
-async function getMovies(filter) {
-    return res = await fetch(url + filter)
+async function getMovies(page_url) {
+    return res = await fetch(page_url)
+        .then(function(res) {
+            if (res.ok) {
+                return res.json();
+            }
+        })
+        .then(function(value) {
+            console.log
+            let result = value.results;
+            let prev = value.previous;
+            let next = value.next;
+            return [result, prev, next];
+        })
+        .catch(function(err) {
+            console.log('errorMovies')
+        });
+}
+
+async function getTopMovies(page_url) {
+    return res = await fetch(page_url)
         .then(function(res) {
             if (res.ok) {
                 return res.json();
@@ -146,16 +163,17 @@ async function getMovies(filter) {
         })
         .then(function(value) {
             let result = value.results;
+            let prev = value.previous;
             let next = value.next;
-            return [result, next];
+            return result;
         })
         .catch(function(err) {
-            console.log('error')
+            console.log('errorMovies')
         });
 }
 
-async function getMovie(filter) {
-    return res = await fetch(url + filter)
+async function getMovie(movieId) {
+    return res = await fetch(url + movieId)
         .then(function(res) {
             if (res.ok) {
                 return res.json();
@@ -165,15 +183,15 @@ async function getMovie(filter) {
             return value;
         })
         .catch(function(err) {
-            console.log('error')
+            console.log('errorMovie')
         });
 }
 
 function topMovie() {
-    getMovies('?sort_by=-imdb_score')
+    page_url = url + '?sort_by=-imdb_score'
+    getTopMovies(page_url)
     .then(ret => {
-        let movies = ret[0];
-        let movie = movies[0]
+        let movie = ret[0]
         topMovieWindow(movie)
     });
 }
@@ -181,26 +199,31 @@ function topMovie() {
 topMovie()
 
 for (let cat of categories) {
-    getMovies('?genre=' + cat)
-        .then(ret => {
-            let movies = ret[0];
-            let next = ret[1];
-            if (next != null) {
-                next_page = next.split("/").pop();
-                getMovies(next_page)
-                .then((res) => {
-                    let moviesToAdd = res[0]
-                    next = res[1]
-                    for (let movie of moviesToAdd) {
-                        movies.push(movie)
-                    }
-                    console.log(movies)
-                    const newCat =  document.createElement("div");
-                    let genre = cat
-                    newCat.setAttribute('id', cat)
-                    categoryCont.appendChild(newCat);
-                    carrousel(genre, movies)
-                })
-            }
-    });
+    pageUrl = url + '?genre=' + cat
+    const newCat =  document.createElement("div");
+    newCat.setAttribute('id', cat)
+    categoryCont.appendChild(newCat);
+    let carrousel = document.getElementById(cat);
+    carrousel.innerHTML = (
+        '<div class="carousel-container">\
+            <div class="inner-carousel">\
+                <div class="track"></div>\
+                <div class="nav">\
+                    <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>\
+                    <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>\
+                </div>\
+            </div>\
+        </div>'
+    )
+    getCarrousel(cat, pageUrl)
+    // getMovies(page_url)
+    //     .then(ret => {
+    //         let movies = ret[0];
+    //         let prev = ret[1];
+    //         let next = ret[2];
+    //         const newCat =  document.createElement("div");
+    //         newCat.setAttribute('id', cat)
+    //         categoryCont.appendChild(newCat);
+    //         carrousel(cat, movies, prev, next)
+    // });
 }
