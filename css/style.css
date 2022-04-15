@@ -122,6 +122,12 @@ img {
   border-radius: 10px;
 }
 
+.title {
+  font-size: 300%;
+  opacity: 100;
+
+}
+
 .nav button {
     position: absolute;
     top: 50%;
