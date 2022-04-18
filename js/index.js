@@ -49,7 +49,7 @@ function displayMovieCard(movie) {
                 <h2>'+ movie_detail.year +'</h2>\
                 <h2>'+ movie_detail.rated +'</h2>\
                 <h2>'+ movie_detail.imdb_score +'</h2>\
-                <h4>'+ movie_detail.writers +'</h4>\
+                <h4>'+ movie_detail.directors +'</h4>\
                 <h4>'+ movie_detail.actors +'</h4>\
                 <h4>'+ movie_detail.duration +'</h4>\
                 <h4>'+ movie_detail.countries +'</h4>\
@@ -81,57 +81,66 @@ function topMovieWindow(movie) {
     }
 }
 
-function getCarrousel(genre, pageUrl) {
+function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
     const track = document.querySelector('#' + genre + ' .track');
-    getMovies(pageUrl)
-    .then(ret => {
-        movies = ret[0];
-        prevPage = ret[1];
-        nextPage = ret[2];
-        for (let movie of movies) {
-            cardCont = document.createElement('div')
-            cardCont.classList.add("card-container")
-            cardCont.innerHTML =  (
-                    '<p><button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./sans-couverture.png\'"></button></p>'
-            )
-            track.appendChild(cardCont)
-            var btn = document.getElementById("modalBtn"+ movie.id);
-            btn.onclick = function() {
-                getModalContent(movie)
-            }
-        }
-    });
-    sel = ('#' + genre + ' .prev')
     const prev = document.querySelector('#' + genre + ' .prev');
     const next = document.querySelector('#' + genre + ' .next');
-    const carousel = document.querySelector('#' + genre + ' .carousel-container');
-    // const track = document.querySelector('#' + genre + ' .track');
+    let carousel = document.querySelector('#' + genre + ' .carousel-container');
     let width = carousel.offsetWidth;
-    let index = 0;
-    console.log(width)
+    // if (!(index in indexList)) {
+    //     indexList.push(index)
+    // };
+    console.log(indexList)
     window.addEventListener("resize", function () {
       width = carousel.offsetWidth;
     });
     next.addEventListener("click", function (e) {
-      e.preventDefault();
-      index = index + 1;
-      prev.classList.add("show");
-      track.style.transform = "translateX(" + index * -width  + "px)";
-      if (track.offsetWidth - index * width < index * width) {
-        next.classList.add("hide");
-      }
-      track.innerHTML = '';
-      getCarrousel(genre, nextPage)
+        e.preventDefault();
+        if (!(index in indexList)) {
+            indexList.push(index)
+            getMovies(nextPage)
+            .then(ret => {
+                movies = ret[0];
+                prevPage = ret[1];
+                nextPage = ret[2];
+                for (let movie of movies) {
+                    cardCont = document.createElement('div')
+                    cardCont.classList.add("card-container")
+                    cardCont.innerHTML =  (
+                        '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./sans-couverture.png\'"></button>'
+                    )
+                    track.appendChild(cardCont)
+                    var btn = document.getElementById("modalBtn"+ movie.id);
+                    btn.onclick = function() {
+                        getModalContent(movie)
+                    }
+                }
+            });
+        }
+        index = index + 1;
+        prev.classList.add("show");
+        track.style.transform = "translateX(" + index * -width  + "px)";
+        // if (track.offsetWidth - index * width < index * width) {
+        //   next.classList.add("hide");
+        // }
+        if (nextPage == null) {
+          next.classList.add("hide");
+        }
+        getCarrousel(genre, prevPage, nextPage, index, indexList)
     });
     prev.addEventListener("click", function () {
-      index = index - 1;
-      next.classList.remove("hide");
-      if (index === 0) {
-        prev.classList.remove("show");
-      }
-      track.style.transform = "translateX(" + index * -width + "px)";
-      track.innerHTML = '';
-      getCarrousel(genre, prevPage)
+        index = index - 1;
+        console.log(index)
+        next.classList.remove("hide");
+        if (index === 0) {
+          prev.classList.remove("show");
+        }
+        // console.log(prevPage)
+        // if (prevPage == 'null') {
+        //   next.classList.add("hide");
+        // }
+        track.style.transform = "translateX(" + index * -width + "px)";
+        getCarrousel(genre, prevPage, nextPage, index, indexList)
     });
 }
 
@@ -199,7 +208,7 @@ function topMovie() {
 topMovie()
 
 for (let cat of categories) {
-    pageUrl = url + '?genre=' + cat
+    pageUrl = url + '?genre=' + cat // + '?sort_by=-imdb_score'
     const newCat =  document.createElement("div");
     newCat.setAttribute('id', cat)
     categoryCont.appendChild(newCat);
@@ -215,7 +224,27 @@ for (let cat of categories) {
             </div>\
         </div>'
     )
-    getCarrousel(cat, pageUrl)
+    const track = document.querySelector('#' + cat + ' .track');
+    getMovies(pageUrl)
+    .then(ret => {
+        movies = ret[0];
+        prevPage = ret[1];
+        nextPage = ret[2];
+        for (let movie of movies) {
+            cardCont = document.createElement('div')
+            cardCont.classList.add("card-container")
+            cardCont.innerHTML =  (
+                '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./sans-couverture.png\'"></button>'
+            )
+            track.appendChild(cardCont)
+            var btn = document.getElementById("modalBtn"+ movie.id);
+            btn.onclick = function() {
+                getModalContent(movie)
+            }
+        }
+        getCarrousel(cat, prevPage, nextPage)
+    });
+    // getCarrousel(cat, pageUrl, prevPage, nextPage)
     // getMovies(page_url)
     //     .then(ret => {
     //         let movies = ret[0];
