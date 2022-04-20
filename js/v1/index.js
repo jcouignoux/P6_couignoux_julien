@@ -59,30 +59,31 @@ function displayMovieCard(movie) {
 
 function topMovieWindow(movie) {
     let topMovie = document.getElementById('topMovie');
-    console.log(movie.genres[0])
-    topMovie.innerHTML = (
-        '<div class="topCard-container">\
-        <div>\
-            <p class="catTitle">Best Movie<p>\
-        </div>\
-        <button id="modalBtntopMovie' + movie.id + '">\
-            <div class="topCard">\
-                <div>\
-                    <img src="' + movie.image_url +'">\
-                </div>\
-                <div>\
-                    <p class="title">'+ movie.title +'<p>\
-                    <p>IMDB: '+ movie.imdb_score +'<p>\
-                    <p>genre: '+ movie.genres[0] +'<p>\
-                </div>\
+    getMovie(movie.id)
+    .then(movieDetail => {
+        topMovie.innerHTML = (
+            '<div class="topCard-container">\
+            <div>\
+                <p class="catTitle">Best Movie<p>\
             </div>\
-        </button>\
-        </div>'
-    )
-    var btn = document.getElementById("modalBtntopMovie" + movie.id);
-    btn.onclick = function() {
-        getModalContent(movie)
-    }
+            <button id="modalBtntopMovie' + movieDetail.id + '">\
+                <div class="topCard">\
+                    <div>\
+                        <img src="' + movieDetail.image_url +'">\
+                    </div>\
+                    <div>\
+                        <p class="title">'+ movieDetail.title +'<p>\
+                        <p>Resume: '+ movieDetail.description +'<p>\
+                    </div>\
+                </div>\
+            </button>\
+            </div>'
+        )
+        var btn = document.getElementById("modalBtntopMovie" + movie.id);
+        btn.onclick = function() {
+            getModalContent(movie)
+        }
+    })
 }
 
 function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
@@ -107,7 +108,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
                     cardCont = document.createElement('div')
                     cardCont.classList.add("card-container")
                     cardCont.innerHTML =  (
-                        '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'" alt='+ movie.title +'></button>'
+                        '<button id="modalBtn'+ movie.id +'"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'" alt='+ movie.title +'></button>'
                     )
                     track.appendChild(cardCont)
                     var btn = document.getElementById("modalBtn"+ movie.id);
