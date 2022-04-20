@@ -5,12 +5,12 @@ $window-background-color: #949090;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Roboto Slab', serif;
 }
 
 body {
     background-color: $background-color;
     color: #EEE;
-    font-family: 'Roboto Slab', serif;
 }
 
 header {
@@ -47,7 +47,7 @@ header {
             width: 600px;
             align-self: center;
             .title {
-                font-size: xx-large;
+                font-size: 50px;
             }
         }
     }
@@ -58,7 +58,7 @@ header {
     display: flex;
     justify-content: center;
     .catTitle {
-        font-size: x-large;
+        font-size: xx-large;
     }
 }
 
