@@ -1,5 +1,3 @@
-// import { movie } from './models';
-// const movie = require('./model/movie')
 const url = "http://localhost:8000/api/v1/titles/"
 const categories = ['action', 'animation', 'biography']
 const topCont = document.getElementById('conteneur');
@@ -39,7 +37,7 @@ function displayMovieCard(movie) {
         movieCard.innerHTML = (
             '<div class="card">\
                 <div>\
-                    <img src="' + movie_detail.image_url +'" alt="John" style="width:100%">\
+                    <img src="' + movie_detail.image_url +'" alt='+ movie.title +'>\
                 </div>\
                 <div>\
                     <p class="title">'+ movie_detail.title +'</p>\
@@ -64,7 +62,7 @@ function topMovieWindow(movie) {
     topMovie.innerHTML = (
         '<div class="topCard-container">\
         <div>\
-            <p class="title">Best Movie<p>\
+            <p class="catTitle">Best Movie<p>\
         </div>\
         <button id="modalBtn' + movie.id + '">\
             <div class="topCard">\
@@ -107,7 +105,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
                     cardCont = document.createElement('div')
                     cardCont.classList.add("card-container")
                     cardCont.innerHTML =  (
-                        '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src="sans-couverture.png"></button>'
+                        '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'" alt='+ movie.title +'></button>'
                     )
                     track.appendChild(cardCont)
                     var btn = document.getElementById("modalBtn"+ movie.id);
@@ -219,7 +217,7 @@ function topMovies() {
             cardCont = document.createElement('div')
             cardCont.classList.add("card-container")
             cardCont.innerHTML =  (
-                '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'../apps/img/sans-couverture.png\'"></button>'
+                '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'../img/sans-couverture.png\'"></button>'
             )
             track.appendChild(cardCont)
             var btn = document.getElementById("modalBtn"+ movie.id);
@@ -234,7 +232,7 @@ function topMovies() {
 topMovies()
 
 for (let cat of categories) {
-    let pageUrl = url + '?genre=' + cat // + '?sort_by=-imdb_score'
+    let pageUrl = url + '?genre=' + cat
     const newCat =  document.createElement("div");
     newCat.setAttribute('id', cat)
     categoryCont.appendChild(newCat);
@@ -261,7 +259,7 @@ for (let cat of categories) {
             cardCont = document.createElement('div')
             cardCont.classList.add("card-container")
             cardCont.innerHTML =  (
-                '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./sans-couverture.png\'"></button>'
+                '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'" alt='+movie.title+'></button>'
             )
             track.appendChild(cardCont)
             var btn = document.getElementById("modalBtn"+ movie.id);
