@@ -14,7 +14,7 @@ function getModalContent(movie) {
     modal.innerHTML = (
         '<div class="modal-content">\
             <span id="close'+ movie.id +'" class="close">&times;</span>\
-            <div id=card' + movie.id + '></div>\
+            <div id=card'+ movie.id +'></div>\
         </div>'
     )
     displayMovieCard(movie)
@@ -39,20 +39,20 @@ function displayMovieCard(movie) {
         movieCard.innerHTML = (
             '<div class="card">\
                 <div>\
-                <img src="' + movie_detail.image_url +'" alt="John" style="width:100%">\
+                    <img src="' + movie_detail.image_url +'" alt="John" style="width:100%">\
                 </div>\
                 <div>\
-                <p class="title">'+ movie_detail.title +'</p>\
-                <p>'+ movie_detail.genres +'<p>\
-                <h2>'+ movie_detail.year +'</h2>\
-                <h2>'+ movie_detail.rated +'</h2>\
-                <h2>'+ movie_detail.imdb_score +'</h2>\
-                <h4>'+ movie_detail.directors +'</h4>\
-                <h4>'+ movie_detail.actors +'</h4>\
-                <h4>'+ movie_detail.duration +'</h4>\
-                <h4>'+ movie_detail.countries +'</h4>\
-                <h4>'+ movie_detail.worldwide_gross_income +'</h4>\
-                <h4>'+ movie_detail.description +'</h4>\
+                    <p class="title">'+ movie_detail.title +'</p>\
+                    <p>'+ movie_detail.genres +'<p>\
+                    <p>Year: '+ movie_detail.year +'</p>\
+                    <p>Rating: '+ movie_detail.rated +'</p>\
+                    <p>IMDB: '+ movie_detail.imdb_score +'</p>\
+                    <p>Directors: '+ movie_detail.directors +'</p>\
+                    <p>With: '+ movie_detail.actors +'</p>\
+                    <p>Duration: '+ movie_detail.duration +' min.</p>\
+                    <p>'+ movie_detail.countries +'</p>\
+                    <p>'+ movie_detail.worldwide_gross_income +'</p>\
+                    <p>Description: '+ movie_detail.description +'</p>\
                 </div>\
             </div>'
         )
@@ -63,13 +63,17 @@ function topMovieWindow(movie) {
     let topMovie = document.getElementById('topMovie');
     topMovie.innerHTML = (
         '<div class="topCard-container">\
+        <div>\
+            <p class="title">Best Movie<p>\
+        </div>\
         <button id="modalBtn' + movie.id + '">\
             <div class="topCard">\
                 <div>\
                     <img src="' + movie.image_url +'">\
                 </div>\
                 <div>\
-                    <p class="catTitle">'+ movie.title +'<p>\
+                    <p class="title">'+ movie.title +'<p>\
+                    <p>IMDB: '+ movie.imdb_score +'<p>\
                 </div>\
             </div>\
         </button>\
@@ -103,7 +107,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
                     cardCont = document.createElement('div')
                     cardCont.classList.add("card-container")
                     cardCont.innerHTML =  (
-                        '<button id="modalBtn' + movie.id + '"><img class="carImg" src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'"></button>'
+                        '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src="sans-couverture.png"></button>'
                     )
                     track.appendChild(cardCont)
                     var btn = document.getElementById("modalBtn"+ movie.id);
@@ -116,24 +120,17 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
         index = index + 1;
         prev.classList.add("show");
         track.style.transform = "translateX(" + index * -width  + "px)";
-        // if (track.offsetWidth - index * width < index * width) {
-        //   next.classList.add("hide");
-        // }
         if (nextPage == null) {
-          next.classList.add("hide");
+            next.classList.add("hide");
         }
         getCarrousel(genre, prevPage, nextPage, index, indexList)
     });
     prev.addEventListener("click", function () {
         index = index - 1;
         next.classList.remove("hide");
-        if (index === 0) {
+        if (index == 0) {
           prev.classList.remove("show");
         }
-        // console.log(prevPage)
-        // if (prevPage == 'null') {
-        //   next.classList.add("hide");
-        // }
         track.style.transform = "translateX(" + index * -width + "px)";
         getCarrousel(genre, prevPage, nextPage, index, indexList)
     });
@@ -147,7 +144,6 @@ async function getMovies(page_url) {
             }
         })
         .then(function(value) {
-            console.log
             let result = value.results;
             let prev = value.previous;
             let next = value.next;
