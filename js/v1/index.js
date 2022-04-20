@@ -7,7 +7,7 @@ function getModalContent(movie) {
     let conteneur = document.getElementById('conteneur')
     let modal = document.createElement('div')
     conteneur.appendChild(modal)
-    modal.setAttribute('id', 'myModal'+ movie.id)
+    modal.setAttribute('id', 'myModal'+ movie.genre + movie.id)
     modal.classList.add('modal')
     modal.innerHTML = (
         '<div class="modal-content">\
@@ -59,12 +59,13 @@ function displayMovieCard(movie) {
 
 function topMovieWindow(movie) {
     let topMovie = document.getElementById('topMovie');
+    console.log(movie.genres[0])
     topMovie.innerHTML = (
         '<div class="topCard-container">\
         <div>\
             <p class="catTitle">Best Movie<p>\
         </div>\
-        <button id="modalBtn' + movie.id + '">\
+        <button id="modalBtntopMovie' + movie.id + '">\
             <div class="topCard">\
                 <div>\
                     <img src="' + movie.image_url +'">\
@@ -72,12 +73,13 @@ function topMovieWindow(movie) {
                 <div>\
                     <p class="title">'+ movie.title +'<p>\
                     <p>IMDB: '+ movie.imdb_score +'<p>\
+                    <p>genre: '+ movie.genres[0] +'<p>\
                 </div>\
             </div>\
         </button>\
         </div>'
     )
-    var btn = document.getElementById("modalBtn"+ movie.id);
+    var btn = document.getElementById("modalBtntopMovie" + movie.id);
     btn.onclick = function() {
         getModalContent(movie)
     }
@@ -217,10 +219,10 @@ function topMovies() {
             cardCont = document.createElement('div')
             cardCont.classList.add("card-container")
             cardCont.innerHTML =  (
-                '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'../img/sans-couverture.png\'"></button>'
+                '<button id="modalBtn'+ cat + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'../img/sans-couverture.png\'"></button>'
             )
             track.appendChild(cardCont)
-            var btn = document.getElementById("modalBtn"+ movie.id);
+            var btn = document.getElementById("modalBtn"+ cat + movie.id);
             btn.onclick = function() {
                 getModalContent(movie)
             }
@@ -232,7 +234,7 @@ function topMovies() {
 topMovies()
 
 for (let cat of categories) {
-    let pageUrl = url + '?genre=' + cat
+    let pageUrl = url + '?genre=' + cat+ '&sort_by=-imdb_score'
     const newCat =  document.createElement("div");
     newCat.setAttribute('id', cat)
     categoryCont.appendChild(newCat);
