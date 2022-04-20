@@ -1,84 +1,108 @@
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    background-color: #111;
-    color: #EEE;
-    font-family: 'Roboto Slab', serif;
-  }
+  background-color: #111;
+  color: #EEE;
+  font-family: 'Roboto Slab', serif;
+}
 
 header {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-around;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+header #bigTitle {
+  font-size: 150px;
+  width: 800px;
+  height: auto;
+  vertical-align: middle;
 }
 
 #conteneur, #categories {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 #topMovie {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   padding-top: 50px;
 }
 
-.topCard {
+#topMovie .topCard {
   width: 800px;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* background-position: center bottom;
-  background-size: center; */
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-position: center bottom;
+  background-color: #949090;
   background-repeat: no-repeat;
-  border-radius: 10px;
 }
 
-.category {
-    display: flex;
-    justify-content: center;
+#categories, #topMovie, #topMovies {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+#categories .catTitle, #topMovie .catTitle, #topMovies .catTitle {
+  font-size: x-large;
 }
 
 img {
-    max-width: 200%;
+  max-width: 200%;
 }
 
-#bigTitle {
-    font-size: 150px;
-    width: 800px;
-    height: auto;
-    vertical-align: middle;
-    /* margin-left: auto;
-    margin-right: auto; */
-}
-
-.catTitle {
-    font-size: x-large;
-}
-
-/* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+.modal .modal-content {
+  background-color: #949090;
+  margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  border: 1px solid #949090;
+  width: 80%;
 }
 
-/* The Close Button */
 .close {
   color: #aaa;
   float: right;
@@ -86,17 +110,10 @@ img {
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.close:hover, .close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 .carousel-container {
@@ -105,29 +122,40 @@ img {
   position: relative;
   border-left-width: 4px;
   border-left-style: solid;
-  border-left-color: #aaa;
+  border-left-color: #949090;
 }
+
 @media (max-width: 768px) {
   .carousel-container {
     width: 95%;
   }
 }
+
 .inner-carousel {
   width: 100%;
   height: 250px;
   overflow: hidden;
 }
+
 .track {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
   height: 100%;
+  -webkit-transition: -webkit-transform 0.2s ease-in-out;
+  transition: -webkit-transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
 }
+
 .card-container {
   width: 200px;
   height: 400px;
-  flex-shrink: 0;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
   padding-right: 10px;
 }
+
 @media (max-width: 768px) {
   .card-container {
     width: 184px;
@@ -137,43 +165,50 @@ img {
 .card {
   width: 100%;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  /* justify-content: space-between; */
-  /* flex-direction: column; */
-  justify-content: center;
-  /* align-items: center; */
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   background-position: center bottom;
-  background-size: center;
   background-repeat: no-repeat;
   border-radius: 10px;
 }
 
-.title {
-  font-size: 300%;
-  opacity: 100;
+.nav button {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translatey(-50%);
+          transform: translatey(-50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  outline: none;
+  border: 1px solid #000;
+  cursor: pointer;
 }
 
-.nav button {
-    position: absolute;
-    top: 50%;
-    transform: translatey(-50%);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    outline: none;
-    border: 1px solid #000;
-    cursor: pointer;
-}
 .nav .prev {
-    left: -30px;
-    display: none;
+  left: -30px;
+  display: none;
 }
+
 .nav .prev.show {
-    display: block;
+  display: block;
 }
+
 .nav .next {
-    right: -30px;
+  right: -30px;
 }
+
 .nav .next.hide {
-    display: none;
+  display: none;
 }
+/*# sourceMappingURL=style.css.map */
