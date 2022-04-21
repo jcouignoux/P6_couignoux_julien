@@ -120,12 +120,12 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
         }
         index = index + 1;
         prev.classList.add("show");
-        track.style.transform = "translateX(" + index * -width  + "px)";
+        track.style.transform = "translateX(" + index * -width + "px)";
         // if (index == 1) {
         if (nextPage == null) {
             next.classList.add("hide");
         }
-        getCarrousel(genre, prevPage, nextPage, index, indexList)
+        getCarrousel(genre, prevPage, nextPage, index, indexList);
     });
     prev.addEventListener("click", function () {
         index = index - 1;
@@ -134,7 +134,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
           prev.classList.remove("show");
         }
         track.style.transform = "translateX(" + index * -width + "px)";
-        getCarrousel(genre, prevPage, nextPage, index, indexList)
+        getCarrousel(genre, prevPage, nextPage, index, indexList);
     });
 }
 
@@ -210,8 +210,8 @@ function topMovies() {
                 <div class="inner-carousel">\
                     <div class="track"></div>\
                     <div class="nav">\
-                        <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>\
-                        <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>\
+                        <button class="prev"><i>\<</i></button>\
+                        <button class="next"><i>\></i></button>\
                     </div>\
                 </div>\
             </div>'
@@ -247,8 +247,8 @@ for (let cat of categories) {
             <div class="inner-carousel">\
                 <div class="track"></div>\
                 <div class="nav">\
-                    <button class="prev"><i class="fas fa-arrow-left fa-2x"></i></button>\
-                    <button class="next"><i class="fas fa-arrow-right fa-2x"></i></button>\
+                    <button class="prev"><i>\<</i></button>\
+                    <button class="next"><i>\></i></button>\
                 </div>\
             </div>\
         </div>'

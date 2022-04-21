@@ -61,6 +61,8 @@ footer img {
   display: -ms-flexbox;
   display: flex;
   background-color: #949090;
+  border-radius: 5px;
+  padding-top: 5px;
 }
 
 #topMovie .topCard > *:first-child {
@@ -78,6 +80,7 @@ footer img {
 
 #topMovie .topCard > *:last-child .title {
   font-size: 50px;
+  font-weight: bold;
 }
 
 #categories, #topMovie, #topMovies {
@@ -91,6 +94,8 @@ footer img {
 
 #categories .catTitle, #topMovie .catTitle, #topMovies .catTitle {
   font-size: xx-large;
+  text-transform: capitalize;
+  padding-left: 10px;
 }
 
 .modal {
@@ -111,6 +116,7 @@ footer img {
   padding: 20px;
   border: 1px solid #949090;
   width: 80%;
+  border-radius: 5px;
 }
 
 .close {
@@ -128,7 +134,7 @@ footer img {
 
 .carousel-container {
   width: 1000px;
-  margin: 20px auto;
+  margin: 10px auto;
   position: relative;
   border-left-width: 4px;
   border-left-style: solid;
@@ -154,10 +160,7 @@ footer img {
 
 .carousel-container .inner-carousel .track .card-container {
   width: 200px;
-  height: 400px;
-  -ms-flex-negative: 0;
-      flex-shrink: 0;
-  padding-right: 10px;
+  height: 100%;
 }
 
 @media (max-width: 768px) {
@@ -198,6 +201,8 @@ footer img {
 
 .card .title {
   font-size: 40px;
+  color: black;
+  font-weight: bold;
 }
 
 .nav button {
