@@ -121,6 +121,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
         index = index + 1;
         prev.classList.add("show");
         track.style.transform = "translateX(" + index * -width  + "px)";
+        // if (index == 1) {
         if (nextPage == null) {
             next.classList.add("hide");
         }
