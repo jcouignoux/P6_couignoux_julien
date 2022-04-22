@@ -4,6 +4,7 @@ const topCont = document.getElementById('conteneur');
 const categoryCont = document.getElementById('categories');
 
 function getModalContent(movie) {
+    // display modal
     let conteneur = document.getElementById('conteneur')
     let modal = document.createElement('div')
     conteneur.appendChild(modal)
@@ -31,6 +32,7 @@ function getModalContent(movie) {
 }
 
 function displayMovieCard(movie) {
+    // display modal content
     getMovie(movie.id)
     .then(movie_detail => {
         let movieCard = document.getElementById('card' + movie.id)
@@ -58,6 +60,7 @@ function displayMovieCard(movie) {
 }
 
 function topMovieWindow(movie) {
+    // display Best Movie content
     let topMovie = document.getElementById('topMovie');
     getMovie(movie.id)
     .then(movieDetail => {
@@ -87,6 +90,7 @@ function topMovieWindow(movie) {
 }
 
 function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
+    // display carrousel content
     const track = document.querySelector('#' + genre + ' .track');
     const prev = document.querySelector('#' + genre + ' .prev');
     const next = document.querySelector('#' + genre + ' .next');
@@ -99,6 +103,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
         e.preventDefault();
         if (!(index in indexList)) {
             indexList.push(index)
+            // get next movies if needed
             getMovies(nextPage)
             .then(ret => {
                 movies = ret[0];
@@ -139,6 +144,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
 }
 
 async function getMovies(page_url) {
+    // get movies with url
     return res = await fetch(page_url)
         .then(function(res) {
             if (res.ok) {
@@ -156,25 +162,8 @@ async function getMovies(page_url) {
         });
 }
 
-async function getTopMovies(page_url) {
-    return res = await fetch(page_url)
-        .then(function(res) {
-            if (res.ok) {
-                return res.json();
-            }
-        })
-        .then(function(value) {
-            let result = value.results;
-            let prev = value.previous;
-            let next = value.next;
-            return result;
-        })
-        .catch(function(err) {
-            console.log('errorMovies')
-        });
-}
-
 async function getMovie(movieId) {
+    // get movie detail with id
     return res = await fetch(url + movieId)
         .then(function(res) {
             if (res.ok) {
@@ -190,6 +179,8 @@ async function getMovie(movieId) {
 }
 
 function topMovies() {
+    // get top movies and display the best movie
+    // and a carrousel with sorted best movies
     page_url = url + '?sort_by=-imdb_score'
     getMovies(page_url)
     .then(ret => {
@@ -232,9 +223,14 @@ function topMovies() {
         getCarrousel(cat, prevPage, nextPage)
     });
 }
- 
+
+
+// MAIN
+// Display Best movies
 topMovies()
 
+
+// Display a carrousel per category
 for (let cat of categories) {
     let pageUrl = url + '?genre=' + cat+ '&sort_by=-imdb_score'
     const newCat =  document.createElement("div");
