@@ -36,26 +36,30 @@ function displayMovieCard(movie) {
     getMovie(movie.id)
     .then(movie_detail => {
         let movieCard = document.getElementById('card' + movie.id)
-        movieCard.innerHTML = (
-            '<div class="card">\
-                <div>\
-                    <img src="' + movie_detail.image_url +'" alt='+ movie.title +'>\
-                </div>\
-                <div>\
-                    <p class="title">'+ movie_detail.title +'</p>\
-                    <p>'+ movie_detail.genres +'<p>\
-                    <p>Year: '+ movie_detail.year +'</p>\
-                    <p>Rating: '+ movie_detail.rated +'</p>\
-                    <p>IMDB: '+ movie_detail.imdb_score +'</p>\
-                    <p>Directors: '+ movie_detail.directors +'</p>\
-                    <p>With: '+ movie_detail.actors +'</p>\
-                    <p>Duration: '+ movie_detail.duration +' min.</p>\
-                    <p>'+ movie_detail.countries +'</p>\
-                    <p>'+ movie_detail.worldwide_gross_income +'</p>\
-                    <p>Description: '+ movie_detail.description +'</p>\
-                </div>\
-            </div>'
+        let div1 = document.createElement('div')
+        let card = document.createElement('div')
+        card.classList.add('card')
+        let img = document.createElement('img')
+        img.setAttribute('src', movie_detail.image_url)
+        img.setAttribute('alt', movie.title)
+        div1.appendChild(img)
+        card.appendChild(div1)
+        let div2 = document.createElement('div')
+        div2.innerHTML = (
+            '<p class="title">'+ movie_detail.title +'</p>\
+            <p>'+ movie_detail.genres +'<p>\
+            <p>Year: '+ movie_detail.year +'</p>\
+            <p>Rating: '+ movie_detail.rated +'</p>\
+            <p>IMDB: '+ movie_detail.imdb_score +'</p>\
+            <p>Directors: '+ movie_detail.directors +'</p>\
+            <p>With: '+ movie_detail.actors +'</p>\
+            <p>Duration: '+ movie_detail.duration +' min.</p>\
+            <p>'+ movie_detail.countries +'</p>\
+            <p>'+ movie_detail.worldwide_gross_income +'</p>\
+            <p>Description: '+ movie_detail.description +'</p>'
         )
+        card.appendChild(div2)
+        movieCard.appendChild(card)
     })
 }
 
@@ -66,20 +70,20 @@ function topMovieWindow(movie) {
     .then(movieDetail => {
         topMovie.innerHTML = (
             '<div class="topCard-container">\
-            <div>\
-                <p class="catTitle">Best Movie<p>\
-            </div>\
-            <button id="modalBtntopMovie' + movieDetail.id + '">\
-                <div class="topCard">\
-                    <div>\
-                        <img src="' + movieDetail.image_url +'">\
-                    </div>\
-                    <div>\
-                        <p class="title">'+ movieDetail.title +'<p>\
-                        <p>Resume: '+ movieDetail.description +'<p>\
-                    </div>\
+                <div>\
+                    <p class="catTitle">Best Movie<p>\
                 </div>\
-            </button>\
+                <button id="modalBtntopMovie' + movieDetail.id + '">\
+                    <div class="topCard">\
+                        <div>\
+                            <img src="' + movieDetail.image_url +'">\
+                        </div>\
+                        <div>\
+                            <p class="title">'+ movieDetail.title +'<p>\
+                            <p>Resume: '+ movieDetail.description +'<p>\
+                        </div>\
+                    </div>\
+                </button>\
             </div>'
         )
         var btn = document.getElementById("modalBtntopMovie" + movie.id);
@@ -113,11 +117,18 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
                 for (let movie of selectedMovies) {
                     cardCont = document.createElement('div')
                     cardCont.classList.add("card-container")
-                    cardCont.innerHTML =  (
-                        '<button id="modalBtn'+ movie.id +'"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'" alt='+ movie.title +'></button>'
-                    )
+                    let btn = document.createElement('button')
+                    btn.setAttribute('id', 'modalBtn'+ movie.id)
+                    let img = document.createElement('img')
+                    img.setAttribute('src', movie.image_url)
+                    img.setAttribute('alt', movie.title)
+                    btn.appendChild(img)
+                    cardCont.appendChild(btn)
+                    // cardCont.innerHTML =  (
+                    //     '<button id="modalBtn'+ movie.id +'"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'" alt='+ movie.title +'></button>'
+                    // )
                     track.appendChild(cardCont)
-                    var btn = document.getElementById("modalBtn"+ movie.id);
+                    // var btn = document.getElementById("modalBtn"+ movie.id);
                     btn.onclick = function() {
                         getModalContent(movie)
                     }
@@ -196,27 +207,42 @@ function topMovies() {
         newCat.setAttribute('id', cat)
         topMovies.appendChild(newCat);
         let carrousel = document.getElementById(cat);
-        carrousel.innerHTML = (
-            '<div class="carousel-container">\
-                <div class="catTitle">' + cat + '</div>\
-                <div class="inner-carousel">\
-                    <div class="track"></div>\
-                    <div class="nav">\
-                        <button class="prev"><i>\<</i></button>\
-                        <button class="next"><i>\></i></button>\
-                    </div>\
-                </div>\
-            </div>'
-        )
-        const track = document.querySelector('#' + cat + ' .track');
+        let container = document.createElement('div')
+        container.classList.add('carousel-container')
+        let catTitle = document.createElement('div')
+        catTitle.classList.add('catTitle')
+        catTitle.innerHTML = (cat)
+        let inner = document.createElement('div')
+        inner.classList.add('inner-carousel')
+        let track = document.createElement('div')
+        track.classList.add('track')
+        let nav = document.createElement('div')
+        nav.classList.add('nav')
+        let prevBtn = document.createElement('button')
+        prevBtn.classList.add('prev')
+        prevBtn.innerHTML = ('<')
+        let nextBtn = document.createElement('button')
+        nextBtn.classList.add('next')
+        nextBtn.innerHTML = ('>')
+        nav.appendChild(prevBtn)
+        nav.appendChild(nextBtn)
+        inner.appendChild(track)
+        inner.appendChild(nav)
+        container.appendChild(catTitle)
+        container.appendChild(inner)
+        carrousel.appendChild(container)
         for (let movie of movies) {
             cardCont = document.createElement('div')
             cardCont.classList.add("card-container")
-            cardCont.innerHTML =  (
-                '<button id="modalBtn'+ cat + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'../img/sans-couverture.png\'" alt='+movie.title+'></button>'
-            )
+            let btn = document.createElement('button')
+            btn.setAttribute('id', 'modalBtn'+ cat + movie.id)
+            let img = document.createElement('img')
+            img.setAttribute('src', movie.image_url)
+            img.setAttribute('alt', movie.title)
+            img.setAttribute('onerror', "this.onerror=null; this.src=\'../img/sans-couverture.png\'")
+            btn.appendChild(img)
+            cardCont.appendChild(btn)
             track.appendChild(cardCont)
-            var btn = document.getElementById("modalBtn"+ cat + movie.id);
             btn.onclick = function() {
                 getModalContent(movie)
             }
@@ -233,24 +259,35 @@ topMovies()
 
 // Display a carrousel per category
 for (let cat of categories) {
-    let pageUrl = url + '?genre=' + cat+ '&sort_by=-imdb_score'
+    let pageUrl = url + '?genre=' + cat + '&sort_by=-imdb_score'
     const newCat =  document.createElement("div");
     newCat.setAttribute('id', cat)
     categoryCont.appendChild(newCat);
     let carrousel = document.getElementById(cat);
-    carrousel.innerHTML = (
-        '<div class="carousel-container">\
-            <div class="catTitle">' + cat + '</div>\
-            <div class="inner-carousel">\
-                <div class="track"></div>\
-                <div class="nav">\
-                    <button class="prev"><i>\<</i></button>\
-                    <button class="next"><i>\></i></button>\
-                </div>\
-            </div>\
-        </div>'
-    )
-    const track = document.querySelector('#' + cat + ' .track');
+    let container = document.createElement('div')
+    container.classList.add('carousel-container')
+    let catTitle = document.createElement('div')
+    catTitle.classList.add('catTitle')
+    catTitle.innerHTML = (cat)
+    let inner = document.createElement('div')
+    inner.classList.add('inner-carousel')
+    let track = document.createElement('div')
+    track.classList.add('track')
+    let nav = document.createElement('div')
+    nav.classList.add('nav')
+    let prevBtn = document.createElement('button')
+    prevBtn.classList.add('prev')
+    prevBtn.innerHTML = ('<')
+    let nextBtn = document.createElement('button')
+    nextBtn.classList.add('next')
+    nextBtn.innerHTML = ('>')
+    nav.appendChild(prevBtn)
+    nav.appendChild(nextBtn)
+    inner.appendChild(track)
+    inner.appendChild(nav)
+    container.appendChild(catTitle)
+    container.appendChild(inner)
+    carrousel.appendChild(container)
     getMovies(pageUrl)
     .then(ret => {
         let movies = ret[0];
@@ -259,11 +296,16 @@ for (let cat of categories) {
         for (let movie of movies) {
             cardCont = document.createElement('div')
             cardCont.classList.add("card-container")
-            cardCont.innerHTML =  (
-                '<button id="modalBtn' + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'./img/sans-couverture.png\'" alt='+movie.title+'></button>'
-            )
+            let btn = document.createElement('button')
+            btn.setAttribute('id', 'modalBtn' + movie.id)
+            let img = document.createElement('img')
+            img.setAttribute('src', movie.image_url)
+            img.setAttribute('alt', movie.title)
+            img.setAttribute('onerror', "this.onerror=null; this.src=\'../img/sans-couverture.png\'")
+            btn.appendChild(img)
+            cardCont.appendChild(btn)
             track.appendChild(cardCont)
-            var btn = document.getElementById("modalBtn"+ movie.id);
+            btn = document.getElementById("modalBtn"+ movie.id);
             btn.onclick = function() {
                 getModalContent(movie)
             }
