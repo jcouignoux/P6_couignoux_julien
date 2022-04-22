@@ -109,7 +109,8 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
                 movies = ret[0];
                 prevPage = ret[1];
                 nextPage = ret[2];
-                for (let movie of movies) {
+                selectedMovies = movies.slice(0, 2)
+                for (let movie of selectedMovies) {
                     cardCont = document.createElement('div')
                     cardCont.classList.add("card-container")
                     cardCont.innerHTML =  (
@@ -125,9 +126,9 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
         }
         index = index + 1;
         prev.classList.add("show");
-        track.style.transform = "translateX(" + index * -width + "px)";
-        // if (index == 1) {
-        if (nextPage == null) {
+        track.style.transform = "translateX(" + index * -width *2 /5 + "px)";
+        if (index == 1) {
+        // if (nextPage == null) {
             next.classList.add("hide");
         }
         getCarrousel(genre, prevPage, nextPage, index, indexList);
@@ -138,7 +139,7 @@ function getCarrousel(genre, prevPage, nextPage, index=0, indexList=[]) {
         if (index == 0) {
           prev.classList.remove("show");
         }
-        track.style.transform = "translateX(" + index * -width + "px)";
+        track.style.transform = "translateX(" + index * -width *2 /5 + "px)";
         getCarrousel(genre, prevPage, nextPage, index, indexList);
     });
 }
@@ -212,7 +213,7 @@ function topMovies() {
             cardCont = document.createElement('div')
             cardCont.classList.add("card-container")
             cardCont.innerHTML =  (
-                '<button id="modalBtn'+ cat + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'../img/sans-couverture.png\'"></button>'
+                '<button id="modalBtn'+ cat + movie.id + '"><img src='+ movie.image_url +' onerror="this.onerror=null; this.src=\'../img/sans-couverture.png\'" alt='+movie.title+'></button>'
             )
             track.appendChild(cardCont)
             var btn = document.getElementById("modalBtn"+ cat + movie.id);
